@@ -24,6 +24,13 @@ kanaMod.controller('MainController', function($scope, $route){
     $scope.test = "An initial test";
 });
 
+
+//to get kana list
+kanaMod.controller('kanaList', function($scope, $http){
+    $http.get('res/kana.json').success(function (data){
+        $scope.kana = data;
+    });
+
 kanaMod.controller('KanaQuestion', function($scope){
     
 
@@ -33,6 +40,9 @@ kanaMod.controller('KanaQuestion', function($scope){
 * etc
 */
 
+//kana should be a service
+//https://www.airpair.com/javascript/posts/services-in-angularjs-simplified-with-examples
+//https://docs.angularjs.org/tutorial/step_11
     $scope.kana = [
         {
             character:"あ",
@@ -299,6 +309,9 @@ kanaMod.controller('KanaQuestion', function($scope){
 
         $scope.options[$scope.correctOption] = $scope.correctKana.romaji;
         $scope.currentKana = $scope.correctKana.character;
+        //$scope.sound = "/res/audio/" + $scope.correctKana.romaji + ".mp3";
+        $scope.sound = "res/audio/tsu.mp3";
+
     }
 
     $scope.response = function(opt) {

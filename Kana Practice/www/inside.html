@@ -37,7 +37,11 @@
             	<span class="option" ng-bind="options[1]" ng-click="response(1)"></span>
             	<span class="option" ng-bind="options[2]" ng-click="response(2)"></span>
             </div>
+            <audio controls="true">
+                <source ng-src="{{sound}}" />
+            </audio>
         </div>
+
         <!--<script type="text/javascript" src="cordova.js"></script>-->
         <script type="text/javascript" src="js/angular.min.js"></script>
         <script type="text/javascript" src="js/angular-route.min.js"></script>
