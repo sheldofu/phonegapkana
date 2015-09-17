@@ -27,9 +27,10 @@ kanaMod.controller('MainController', function($scope, $route){
 
 //to get kana list
 kanaMod.controller('kanaList', function($scope, $http){
-    $http.get('res/kana.json').success(function (data){
+    $http.get('res/kanalist.json').success(function (data){
         $scope.kana = data;
     });
+});
 
 kanaMod.controller('KanaQuestion', function($scope){
     
