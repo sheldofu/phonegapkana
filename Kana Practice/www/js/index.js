@@ -25,14 +25,38 @@ kanaMod.controller('MainController', function($scope, $route){
 });
 
 
-//to get kana list
-kanaMod.controller('kanaList', function($scope, $http){
-    $http.get('res/kanalist.json').success(function (data){
-        $scope.kana = data;
-    });
+kanaMod.factory('KanaList', ['$http', function ($http) {
+
+    var KanaList = {};
+
+    KanaList.getKana = function() {
+        return $http.get('res/kanalist.json')
+    }
+
+    return KanaList;
+
+}]);
+
+kanaMod.controller('kanaTEST', function($scope, $http, KanaList){
+
+    function getKana() {
+
+        KanaList.getKana()
+        .success(function (data){
+            $scope.kana = data;
+        })
+        .error(function (error) {
+            console.log(error.message);
+        });
+    }
+
+    getKana();
+
 });
 
-kanaMod.controller('KanaQuestion', function($scope){
+
+
+kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
     
 
 /*
@@ -44,258 +68,20 @@ kanaMod.controller('KanaQuestion', function($scope){
 //kana should be a service
 //https://www.airpair.com/javascript/posts/services-in-angularjs-simplified-with-examples
 //https://docs.angularjs.org/tutorial/step_11
-    $scope.kana = [
-        {
-            character:"あ",
-            set:0,
-            romaji:"a"
-        },
-        {
-            character:"い",
-            set:0,
-            romaji:"i"
-        },
-        {
-            character:"う",
-            set:0,
-            romaji:"u"
-        },
-        {
-            character:"え",
-            set:0,
-            romaji:"e"
-        },
-        {
-            character:"お",
-            set:0,
-            romaji:"o"
-        },
+    $scope.kana;
 
+    KanaList.getKana()
+        .success(function (data){
+            $scope.kana = data;
+            console.log(data);
+            console.log($scope.kana.length);
+        })
+        .error(function (error) {
+            console.log(error.message);
+        });
 
-        {
-            character:"か",
-            set:1,
-            romaji:"ka"
-        },        
-        {
-            character:"き",
-            set:1,
-            romaji:"ki"
-        },
-        {
-            character:"く",
-            set:1,
-            romaji:"ku"
-        },
-        {
-            character:"け",
-            set:1,
-            romaji:"ke"
-        },
-        {
-            character:"こ",
-            set:1,
-            romaji:"ko"
-        },
-
-
-        {
-            character:"さ",
-            set:2,
-            romaji:"sa"
-        },
-        {
-            character:"し",
-            set:2,
-            romaji:"shi"
-        },
-        {
-            character:"す",
-            set:2,
-            romaji:"su"
-        },
-        {
-            character:"せ",
-            set:2,
-            romaji:"se"
-        },
-        {
-            character:"そ",
-            set:2,
-            romaji:"so"
-        },
-
-
-        {
-            character:"た",
-            set:3,
-            romaji:"ta"
-        },
-        {
-            character:"ち",
-            set:3,
-            romaji:"chi"
-        },
-        {
-            character:"つ",
-            set:3,
-            romaji:"tsu"
-        },
-        {
-            character:"て",
-            set:3,
-            romaji:"te"
-        },
-        {
-            character:"と",
-            set:3,
-            romaji:"to"
-        },
- 
-
-        {
-            character:"な",
-            set:4,
-            romaji:"na"
-        },
-        {
-            character:"に",
-            set:4,
-            romaji:"ni"
-        },
-        {
-            character:"ぬ",
-            set:4,
-            romaji:"nu"
-        },
-        {
-            character:"ね",
-            set:4,
-            romaji:"ne"
-        },
-        {
-            character:"の",
-            set:4,
-            romaji:"no"
-        },
-
-
-        {
-            character:"は",
-            set:5,
-            romaji:"ha"
-        },
-        {
-            character:"ひ",
-            set:5,
-            romaji:"hi"
-        },
-        {
-            character:"ふ",
-            set:5,
-            romaji:"fu"
-        },
-        {
-            character:"へ",
-            set:5,
-            romaji:"he"
-        },
-        {
-            character:"ほ",
-            set:5,
-            romaji:"ho"
-        },
-
-
-
-        {
-            character:"ま",
-            set:6,
-            romaji:"ma"
-        },
-        {
-            character:"み",
-            set:6,
-            romaji:"mi"
-        },
-        {
-            character:"む",
-            set:6,
-            romaji:"mu"
-        },
-        {
-            character:"め",
-            set:6,
-            romaji:"me"
-        },
-        {
-            character:"も",
-            set:6,
-            romaji:"mo"
-        },
-
-
-        {
-            character:"ら",
-            set:7,
-            romaji:"ra"
-        },
-        {
-            character:"り",
-            set:7,
-            romaji:"ri"
-        },
-        {
-            character:"る",
-            set:7,
-            romaji:"ru"
-        },
-        {
-            character:"れ",
-            set:7,
-            romaji:"re"
-        },
-        {
-            character:"ろ",
-            set:7,
-            romaji:"ro"
-        },
-
-
-        {
-            character:"わ",
-            set:8,
-            romaji:"wa"
-        },
-        {
-            character:"を",
-            set:8,
-            romaji:"wo"
-        },
-
-
-        {
-            character:"や",
-            set:9,
-            romaji:"ya"
-        },
-        {
-            character:"ゆ",
-            set:9,
-            romaji:"yu"
-        },
-        {
-            character:"よ",
-            set:9,
-            romaji:"yo"
-        },
-
-        {
-            character:"ん",
-            set:10,
-            romaji:"n"
-        },
-    ]
+    console.log($scope.kana)
+    // $scope.kana = "{a}";
 
     $scope.options = [];
 
