@@ -31,28 +31,31 @@ kanaMod.factory('KanaList', ['$http', function ($http) {
 
     KanaList.getKana = function() {
         return $http.get('res/kanalist.json')
+                    .then(function(response) {
+                      if (typeof response.data === 'object') {
+                            return response.data;
+                        }            
+                    });
     }
 
     return KanaList;
 
 }]);
 
-kanaMod.controller('kanaTEST', function($scope, $http, KanaList){
+//http://stackoverflow.com/questions/11850025/recommended-way-of-getting-data-from-the-server
 
-    function getKana() {
+// kanaMod.controller('kanaTEST', function($scope, $http, KanaList){
 
-        KanaList.getKana()
-        .success(function (data){
-            $scope.kana = data;
-        })
-        .error(function (error) {
-            console.log(error.message);
-        });
-    }
+//     $scope.kana = "test";
 
-    getKana();
 
-});
+//     // KanaList.getKana()
+//     // .then(function (data){
+//     //     $scope.kana = data;
+//     //     // return data;
+//     // })
+
+// });
 
 
 
@@ -68,24 +71,29 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
 //kana should be a service
 //https://www.airpair.com/javascript/posts/services-in-angularjs-simplified-with-examples
 //https://docs.angularjs.org/tutorial/step_11
+
     $scope.kana;
 
+    // KanaList.getKana()
+    // .success(function (data){
+    //     $scope.kana = data;
+    //     console.log($scope.kana);
+    // })
+    // .error(function (error) {
+    //     console.log(error.message);
+    // });
+
     KanaList.getKana()
-        .success(function (data){
-            $scope.kana = data;
-            console.log(data);
-            console.log($scope.kana.length);
-        })
-        .error(function (error) {
-            console.log(error.message);
-        });
+    .then(function (data){
+        $scope.kana = data;
+        $scope.newKana();
+    });
 
-    console.log($scope.kana)
-    // $scope.kana = "{a}";
-
-    $scope.options = [];
+    console.log($scope.kana);
 
     $scope.newKana = function() {
+
+        $scope.options = [];
 
         $scope.options[0] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
         $scope.options[1] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
@@ -109,7 +117,7 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
         }    
     }
 
-    $scope.newKana();
+    
 
 });
 
