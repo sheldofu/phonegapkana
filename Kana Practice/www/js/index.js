@@ -73,6 +73,7 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
 //https://docs.angularjs.org/tutorial/step_11
 
     $scope.kana;
+    $scope.totalCorrect = 0;
 
     // KanaList.getKana()
     // .success(function (data){
@@ -113,8 +114,15 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
         console.log('clicked' + opt);
         if (opt == $scope.correctOption) {
             console.log('correct');
+            $scope.totalCorrect++
             $scope.newKana();
+        } else {
+            $scope.incorrect();
         }    
+    }
+
+    $scope.incorrect = function() {
+        console.log('incorrect');
     }
 
     
