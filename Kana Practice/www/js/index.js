@@ -38,9 +38,76 @@ kanaMod.factory('KanaList', ['$http', function ($http) {
                     });
     }
 
-    return KanaList;
+    // Kanalist.incrementScore = function() 
+
+     return KanaList;
 
 }]);
+
+kanaMod.controller('ToBeMainController', function(ScoreKeeper, KanaList, $scope){
+    $scope.score = 0;
+    $scope.rightAnswer = "0";
+    $scope.options = [];
+    $scope.kana;
+    $scope.correctKana;
+
+    $scope.incrementScore = function() {
+        console.log('here');
+        $scope.score = ScoreKeeper.scoreAdd($scope.score);
+    }
+
+    KanaList.getKana()
+    .then(function (data){
+        $scope.kana = data;
+        $scope.kanaOptions();
+    });
+
+    $scope.kanaOptions = function() {
+        $scope.options = ScoreKeeper.newKana($scope.kana);
+    }
+
+    $scope.setCorrectKana = function() {
+        $scope.correctKana = ScoreKeeper.correctKana($scope.options);
+    }
+
+});
+
+kanaMod.service('ScoreKeeper', [function() {
+
+    this.scoreAdd = function(score){
+        var score = score + 1;
+        return score;
+    }
+
+    this.newKana = function(kana) {
+        var options = [];
+
+        options[0] = kana[Math.floor((Math.random()*kana.length))];
+        options[1] = kana[Math.floor((Math.random()*kana.length))];
+        options[2] = kana[Math.floor((Math.random()*kana.length))];
+
+        return options;
+    }
+
+    this.correctKana = function(options) {
+        var correctOption = Math.floor((Math.random()*3));
+        var correctKana = options[Math.floor((Math.random()*options.length))]
+
+        return options[correctOption];
+    }
+
+}])
+
+kanaMod.directive('answerButton',function() {
+    return {
+        restrict:'E',
+        scope: {
+            option: '=options',
+            checkAnswer: '&'
+        },
+        template: '<button class="btn-primary" ng-click="checkAnswer()">{{option.romaji}}</button>'
+    }
+});
 
 //http://stackoverflow.com/questions/11850025/recommended-way-of-getting-data-from-the-server
 
@@ -56,8 +123,6 @@ kanaMod.factory('KanaList', ['$http', function ($http) {
 //     // })
 
 // });
-
-
 
 kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
     
