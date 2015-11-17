@@ -33,21 +33,15 @@
         <title>Sheldo Kana</title>
     </head>
     <body ng-app="kanaMod">
-        <div class="container" ng-controller="KanaQuestion">
+        <div class="container" ng-controller="ToBeMainController">
             <div class="main-cont"> 
                 <div class="row">
-                    <div class="col-md-12 smiddle" style="font-size:90px;">{{currentKana}}</div>
+                    <div class="col-md-12 smiddle" style="font-size:90px;">{{correctKana.character}}</div>
                 </div>
                 <div class="row">
-                    	<div class="col-md-4 smiddle"><button class="btn-primary" ng-bind="options[0].romaji" ng-click="response(0)"></button></div>
-                    	<div class="col-md-4 smiddle"><button class="btn-primary" ng-bind="options[1].romaji" ng-click="response(1)"></button></div>
-                    	<div class="col-md-4 smiddle"><button class="btn-primary" ng-bind="options[2].romaji" ng-click="response(2)"></button></div>
-                        <div ng-controller="ToBeMainController">
-                                                    {{score}}
-                            <answer-button check-answer="incrementScore()" ng-attr-options="options[0]"></answer-button>
-                            <answer-button ng-attr-options="options[1]"></answer-button>
-                            <answer-button ng-attr-options="options[2]"></answer-button>
-                        </div>
+                           <div class="col-md-4 smiddle"><answer-button check-answer="isCorrect(options[0])" ng-attr-options="options[0]"></answer-button></div>
+                            <div class="col-md-4 smiddle"><answer-button check-answer="isCorrect(options[1])" ng-attr-options="options[1]"></answer-button></div>
+                            <div class="col-md-4 smiddle"><answer-button check-answer="isCorrect(options[2])" ng-attr-options="options[2]"></answer-button></div>
                 </div>
                 <audio display="false" controls="true">
                     <source ng-src="{{sound}}" />

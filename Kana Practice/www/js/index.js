@@ -20,7 +20,7 @@
 
 var kanaMod = angular.module('kanaMod', ['ngRoute']);
 
-kanaMod.controller('MainController', function($scope, $route){
+kanaMod.controller('MainController', function($scope, ngAnimate, $route){
     $scope.test = "An initial test";
 });
 
@@ -50,17 +50,27 @@ kanaMod.controller('ToBeMainController', function(ScoreKeeper, KanaList, $scope)
     $scope.options = [];
     $scope.kana;
     $scope.correctKana;
+    $scope.correct;
 
-    $scope.incrementScore = function() {
-        console.log('here');
-        $scope.score = ScoreKeeper.scoreAdd($scope.score);
+    $scope.isCorrect = function(selectedOption) {
+        $scope.correct = ScoreKeeper.isCorrect(selectedOption, $scope.correctKana);
+        if ($scope.correct == true) {
+            $scope.correct = false;
+            $scope.kanaOptions();
+            $scope.setCorrectKana();
+        }
     }
 
     KanaList.getKana()
     .then(function (data){
         $scope.kana = data;
         $scope.kanaOptions();
+        $scope.setCorrectKana();
     });
+
+    // $scope.$watch('correct', function(){
+    //     console.log($scope.correct);
+    // })
 
     $scope.kanaOptions = function() {
         $scope.options = ScoreKeeper.newKana($scope.kana);
@@ -74,9 +84,12 @@ kanaMod.controller('ToBeMainController', function(ScoreKeeper, KanaList, $scope)
 
 kanaMod.service('ScoreKeeper', [function() {
 
-    this.scoreAdd = function(score){
-        var score = score + 1;
-        return score;
+    this.isCorrect = function(chosen, correct){
+        if (chosen == correct) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     this.newKana = function(kana) {
@@ -91,8 +104,8 @@ kanaMod.service('ScoreKeeper', [function() {
 
     this.correctKana = function(options) {
         var correctOption = Math.floor((Math.random()*3));
-        var correctKana = options[Math.floor((Math.random()*options.length))]
-
+        //options[Math.floor((Math.random()*options.length))]
+// var correctKana =
         return options[correctOption];
     }
 
@@ -105,6 +118,7 @@ kanaMod.directive('answerButton',function() {
             option: '=options',
             checkAnswer: '&'
         },
+        replace: true,
         template: '<button class="btn-primary" ng-click="checkAnswer()">{{option.romaji}}</button>'
     }
 });
@@ -137,8 +151,8 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
 //https://www.airpair.com/javascript/posts/services-in-angularjs-simplified-with-examples
 //https://docs.angularjs.org/tutorial/step_11
 
-    $scope.kana;
-    $scope.totalCorrect = 0;
+    // $scope.kana;
+    // $scope.totalCorrect = 0;
 
     // KanaList.getKana()
     // .success(function (data){
@@ -149,46 +163,46 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
     //     console.log(error.message);
     // });
 
-    KanaList.getKana()
-    .then(function (data){
-        $scope.kana = data;
-        $scope.newKana();
-    });
+    // KanaList.getKana()
+    // .then(function (data){
+    //     $scope.kana = data;
+    //     $scope.newKana();
+    // });
 
-    console.log($scope.kana);
+    // console.log($scope.kana);
 
-    $scope.newKana = function() {
+    // $scope.newKana = function() {
 
-        $scope.options = [];
+    //     $scope.options = [];
 
-        $scope.options[0] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
-        $scope.options[1] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
-        $scope.options[2] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
+    //     $scope.options[0] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
+    //     $scope.options[1] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
+    //     $scope.options[2] = $scope.kana[Math.floor((Math.random()*$scope.kana.length))].romaji;
 
-        $scope.correctOption = Math.floor((Math.random()*3));
-        $scope.correctKana = $scope.kana[Math.floor((Math.random()*$scope.kana.length))]
+    //     $scope.correctOption = Math.floor((Math.random()*3));
+    //     $scope.correctKana = $scope.kana[Math.floor((Math.random()*$scope.kana.length))]
 
-        $scope.options[$scope.correctOption] = $scope.correctKana.romaji;
-        $scope.currentKana = $scope.correctKana.character;
-        //$scope.sound = "/res/audio/" + $scope.correctKana.romaji + ".mp3";
-        $scope.sound = "res/audio/tsu.mp3";
+    //     $scope.options[$scope.correctOption] = $scope.correctKana.romaji;
+    //     $scope.currentKana = $scope.correctKana.character;
+    //     //$scope.sound = "/res/audio/" + $scope.correctKana.romaji + ".mp3";
+    //     $scope.sound = "res/audio/tsu.mp3";
 
-    }
+    // }
 
-    $scope.response = function(opt) {
-        console.log('clicked' + opt);
-        if (opt == $scope.correctOption) {
-            console.log('correct');
-            $scope.totalCorrect++
-            $scope.newKana();
-        } else {
-            $scope.incorrect();
-        }    
-    }
+    // $scope.response = function(opt) {
+    //     console.log('clicked' + opt);
+    //     if (opt == $scope.correctOption) {
+    //         console.log('correct');
+    //         $scope.totalCorrect++
+    //         $scope.newKana();
+    //     } else {
+    //         $scope.incorrect();
+    //     }    
+    // }
 
-    $scope.incorrect = function() {
-        console.log('incorrect');
-    }
+    // $scope.incorrect = function() {
+    //     console.log('incorrect');
+    // }
 
     
 
