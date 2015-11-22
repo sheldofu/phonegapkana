@@ -64,13 +64,14 @@ kanaMod.factory('AudioService', [function() {
 
 kanaMod.controller('ToBeMainController', function(ScoreKeeper, AudioService, KanaList, $scope){
     $scope.score = 0;
-    $scope.rightAnswer = "0";
     $scope.options = [];
     $scope.kana;
     $scope.correctKana;
     $scope.correct = false;
     $scope.kanaSet;
     $scope.sound = "res/audio/tsu.mp3";
+    $scope.kanaRemoved = 0;
+    $scope.kanaTotal = 0;
 
     $scope.isCorrect = function(selectedOption) {
         $scope.correct = ScoreKeeper.isCorrect(selectedOption, $scope.correctKana);
@@ -82,15 +83,12 @@ kanaMod.controller('ToBeMainController', function(ScoreKeeper, AudioService, Kan
         }
     }
 
-    // $scope.$watch('correct', function(){
-    //     console.log($scope.correct);
-    // })
-
     $scope.setKanaSet = function(set){
         $scope.kanaSet = set;
         KanaList.getKana($scope.kanaSet)
         .then(function (data){
             $scope.kana = data;
+            $scope.kanaTotal = data.length;
             $scope.kanaOptions();
             $scope.setCorrectKana();
         });
@@ -101,8 +99,13 @@ kanaMod.controller('ToBeMainController', function(ScoreKeeper, AudioService, Kan
     }
 
     $scope.setCorrectKana = function() {
+        $scope.kanaRemoved = $scope.kanaRemoved+1;
         $scope.correctKana = ScoreKeeper.correctKana($scope.options);
         AudioService.play($scope.sound);
+        console.log($scope.kana);
+        console.log($scope.correctKana.id);
+        console.log($scope.kanaRemoved);
+        $scope.kana.splice($scope.correctKana.id-$scope.kanaRemoved,1)
     }
 
 });
@@ -129,8 +132,6 @@ kanaMod.service('ScoreKeeper', [function() {
 
     this.correctKana = function(options) {
         var correctOption = Math.floor((Math.random()*3));
-        //options[Math.floor((Math.random()*options.length))]
-// var correctKana =
         return options[correctOption];
     }
 
@@ -144,7 +145,7 @@ kanaMod.directive('answerButton',function() {
             checkAnswer: '&'
         },
         replace: true,
-        template: '<button class="btn-primary" ng-click="checkAnswer()">{{option.romaji}}</button>'
+        template: '<button class="btn-primary" ng-click="checkAnswer()">{{option.character}}</button>'
     }
 });
 

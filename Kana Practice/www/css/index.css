@@ -36,12 +36,12 @@ body {
         color-stop(0.51, #E4E4E4)
     );
     background-attachment:fixed;
-*/    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+*/  font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
     height:100%;
     margin:0px;
     padding:0px;
-    text-transform:uppercase;
+    text-transform:none;
     width:100%;
     background-color: transparent;
 }
@@ -88,6 +88,11 @@ html {
     height: 60px;
     margin-top: 30px;
     font-size: 30px;
+    border-radius: 25px
+}
+
+.btn-primary:focus{
+    outline:none;
 }
 
 .container {
