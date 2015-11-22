@@ -28,24 +28,34 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet".0 
+        type="text/css" href="css/index.css" />
 
         <title>Sheldo Kana</title>
     </head>
     <body ng-app="kanaMod">
         <div class="container" ng-controller="ToBeMainController">
-            <div class="main-cont"> 
+            <div class="main-cont" ng-hide="kanaSet">
                 <div class="row">
-                    <div class="col-md-12 smiddle" style="font-size:90px;">{{correctKana.character}}</div>
+                    <div class="col-md-12" ng-hide="correct" style="font-size:20px;padding-top:30px">
+                        Which character set would you like to practice?
+                    </div>
+                </div>
+                <button class="btn-primary" ng-click="setKanaSet(1)">Hiragana</button>
+                <button class="btn-primary" ng-click="setKanaSet(2)">Katakana</button>
+            </div>
+            <div class="main-cont" ng-show="kanaSet">
+                <div class="row">
+                    <div class="col-md-12 smiddle" ng-hide="correct" style="font-size:40px;">Score: {{score}}</div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-12 smiddle" ng-hide="correct" style="font-size:90px;">{{correctKana.character}}</div>
                 </div>
                 <div class="row">
-                           <div class="col-md-4 smiddle"><answer-button check-answer="isCorrect(options[0])" ng-attr-options="options[0]"></answer-button></div>
-                            <div class="col-md-4 smiddle"><answer-button check-answer="isCorrect(options[1])" ng-attr-options="options[1]"></answer-button></div>
-                            <div class="col-md-4 smiddle"><answer-button check-answer="isCorrect(options[2])" ng-attr-options="options[2]"></answer-button></div>
+                           <div class="smiddle"><answer-button check-answer="isCorrect(options[0])" ng-attr-options="options[0]"></answer-button></div>
+                            <div class="smiddle"><answer-button check-answer="isCorrect(options[1])" ng-attr-options="options[1]"></answer-button></div>
+                            <div class="smiddle"><answer-button check-answer="isCorrect(options[2])" ng-attr-options="options[2]"></answer-button></div>
                 </div>
-                <audio display="false" controls="true">
-                    <source ng-src="{{sound}}" />
-                </audio>
                 <div ng-bind="totalCorrect"></div>
             </div>
         </div>

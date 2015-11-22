@@ -20,22 +20,25 @@
 
 var kanaMod = angular.module('kanaMod', ['ngRoute']);
 
-kanaMod.controller('MainController', function($scope, ngAnimate, $route){
-    $scope.test = "An initial test";
-});
-
-
 kanaMod.factory('KanaList', ['$http', function ($http) {
 
     var KanaList = {};
-
-    KanaList.getKana = function() {
+    KanaList.getKana = function(set) {
+        if (set == 1) {
         return $http.get('res/kanalist.json')
                     .then(function(response) {
                       if (typeof response.data === 'object') {
                             return response.data;
                         }            
                     });
+        } else {
+        return $http.get('res/katakana.json')
+                    .then(function(response) {
+                      if (typeof response.data === 'object') {
+                            return response.data;
+                        }            
+                    });            
+        }
     }
 
     // Kanalist.incrementScore = function() 
@@ -44,33 +47,54 @@ kanaMod.factory('KanaList', ['$http', function ($http) {
 
 }]);
 
-kanaMod.controller('ToBeMainController', function(ScoreKeeper, KanaList, $scope){
+kanaMod.factory('AudioService', [function() {
+  var audioElement = document.createElement('audio'); // <-- Magic trick here
+  return {
+    audioElement: audioElement,
+
+    play: function(filename) {
+        audioElement.src = filename;
+        audioElement.play();     //  <-- Thats all you need
+    }
+    // Exersise for the reader - extend this service to include other functions
+    // like pausing, etc, etc.
+
+  }
+}]);
+
+kanaMod.controller('ToBeMainController', function(ScoreKeeper, AudioService, KanaList, $scope){
     $scope.score = 0;
     $scope.rightAnswer = "0";
     $scope.options = [];
     $scope.kana;
     $scope.correctKana;
-    $scope.correct;
+    $scope.correct = false;
+    $scope.kanaSet;
+    $scope.sound = "res/audio/tsu.mp3";
 
     $scope.isCorrect = function(selectedOption) {
         $scope.correct = ScoreKeeper.isCorrect(selectedOption, $scope.correctKana);
         if ($scope.correct == true) {
+            $scope.score = $scope.score +1;
             $scope.correct = false;
             $scope.kanaOptions();
             $scope.setCorrectKana();
         }
     }
 
-    KanaList.getKana()
-    .then(function (data){
-        $scope.kana = data;
-        $scope.kanaOptions();
-        $scope.setCorrectKana();
-    });
-
     // $scope.$watch('correct', function(){
     //     console.log($scope.correct);
     // })
+
+    $scope.setKanaSet = function(set){
+        $scope.kanaSet = set;
+        KanaList.getKana($scope.kanaSet)
+        .then(function (data){
+            $scope.kana = data;
+            $scope.kanaOptions();
+            $scope.setCorrectKana();
+        });
+    }
 
     $scope.kanaOptions = function() {
         $scope.options = ScoreKeeper.newKana($scope.kana);
@@ -78,6 +102,7 @@ kanaMod.controller('ToBeMainController', function(ScoreKeeper, KanaList, $scope)
 
     $scope.setCorrectKana = function() {
         $scope.correctKana = ScoreKeeper.correctKana($scope.options);
+        AudioService.play($scope.sound);
     }
 
 });
@@ -137,9 +162,6 @@ kanaMod.directive('answerButton',function() {
 //     // })
 
 // });
-
-kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
-    
 
 /*
 * 0: a-o, hiragana
@@ -205,8 +227,6 @@ kanaMod.controller('KanaQuestion', function($scope, $http, KanaList){
     // }
 
     
-
-});
 
 // kanaMod.config(['$routeProvider',
 //     function($routeProvider) {

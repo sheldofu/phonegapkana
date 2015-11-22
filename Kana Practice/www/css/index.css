@@ -24,7 +24,7 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
+/*    background-color:#E4E4E4;
     background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
@@ -36,13 +36,14 @@ body {
         color-stop(0.51, #E4E4E4)
     );
     background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+*/    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
     height:100%;
     margin:0px;
     padding:0px;
     text-transform:uppercase;
     width:100%;
+    background-color: transparent;
 }
 
 /* Portrait layout (default) */
@@ -57,16 +58,25 @@ body {
     padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
     margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
                                    /* offset horizontal: half of text area width */
+    color:white;
+}
+
+html {
+    background:url(../img/back_candidate.jpg) no-repeat center top;
+    background-size: cover;
 }
 
 .main-cont {
-    position:relative;             /* position in the center of the screen */
-    top:50%;
-    transform: translateY(50%);
-    text-align:center;
-    width: 500px;
+    position: relative;
+    top: 40%;
+    transform: translateY(25%);
+    text-align: center;
+    width: 300px;
     height: 500px;
     margin: auto;
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 94px;
+    color:white;
 }
 
 .smiddle {
@@ -142,3 +152,26 @@ h1 {
 /*button {
     text-transform: none;
     }*/
+
+/* The starting CSS styles for the enter animation */
+.fade.ng-enter {
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+/* The finishing CSS styles for the enter animation */
+.fade.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
