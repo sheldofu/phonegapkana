@@ -21,29 +21,35 @@
 var kanaMod = angular.module('kanaMod', ['ngRoute']);
 
 kanaMod.factory('KanaList', ['$http', function ($http) {
-
+    //refactor to only call file once then store data
     var KanaList = {};
-    KanaList.getKana = function(set) {
-        if (set == 1) {
-        return $http.get('res/kanalist.json')
+    
+    var hiraganaSet = $http.get('res/kanalist.json')
                     .then(function(response) {
                       if (typeof response.data === 'object') {
                             return response.data;
                         }            
                     });
-        } else {
-        return $http.get('res/katakana.json')
+
+    var katakanaSet = $http.get('res/katakana.json')
                     .then(function(response) {
                       if (typeof response.data === 'object') {
                             return response.data;
                         }            
-                    });            
+                    });
+
+    KanaList.getKana = function(set) {
+        if (set == 1) {
+            kanaset = hiraganaSet;
+        } else {
+            kanaset = katakanaSet;
         }
+        return kanaset;
     }
 
     // Kanalist.incrementScore = function() 
-
-     return KanaList;
+ 
+    return KanaList;
 
 }]);
 
@@ -148,6 +154,32 @@ kanaMod.directive('answerButton',function() {
         template: '<button class="btn-primary" ng-click="checkAnswer()">{{option.character}}</button>'
     }
 });
+
+kanaMod.controller('ScoreGrid', function(ScoreKeeper,KanaList,$scope){
+    console.log('something');
+
+    $scope.kana;
+
+    KanaList.getKana(1).then(function (data){
+            $scope.kana = data;
+            // $scope.kanaTotal = data.length;
+            // $scope.kanaOptions();
+            // $scope.setCorrectKana();
+        });
+    console.log($scope.kanaSet);
+
+    // $scope.$watch('kanaSet', function(){
+    //      console.log($scope.kanaSet);
+    // })
+
+    /*$scope.kana;
+    
+    KanaList.getKana($scope.kanaSet)
+    .then(function (data){
+        $scope.kana = data;
+        $scope.kanaTotal = data.length;
+    });*/
+}); 
 
 //http://stackoverflow.com/questions/11850025/recommended-way-of-getting-data-from-the-server
 
