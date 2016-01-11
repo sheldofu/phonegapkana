@@ -98,11 +98,43 @@ html {
 
 .hira-ind{
     float:left;
+    padding: 1px 1px 0 0;
+    opacity: 0;
+}
+
+.hira-holder {
+    font-size: 40px;
+    padding: 100px 0 0 0;
+    margin: auto 0;
 }
 
 .full-height{
     height:100%;
 }
+
+/*@keyframes fadein {
+    0%   {opacity:0;}
+    100%  {opacity:1;}
+}
+
+.fader {
+    opacity: 1;
+    animation-name: fadein;
+    animation-duration: 1s;
+}
+*/
+.fader {
+    opacity: 0;
+    transition: all 1s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+/*.fade-out {
+    opacity: 0;
+}*/
 
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
